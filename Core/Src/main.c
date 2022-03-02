@@ -125,14 +125,14 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	uint16_t lux;
+//	uint16_t lux;
 	uint16_t broadband, ir;
 	
 	int clock = SystemCoreClock;
 	char txt[200]={0};
 	sprintf(txt,"clock= %d\n",clock);
 	HAL_UART_Transmit(&huart1, (uint8_t*)txt, strlen(txt), HAL_MAX_DELAY);
-	char rgbinf[50],colorTempinf[50],Luxinf[50];
+	char rgbinf[50],colorTempinf[50],Luxinf[50],BLEinf[200];
   while (1)
   {
 		//TCS34725
@@ -143,13 +143,13 @@ int main(void)
 		getRGB(&r, &g, &b);
 		colorTemp = calculateColorTemperature(r, g, b);
 //    colorTemp = calculateColorTemperature_dn40(r, g, b,c);
-		lux = calculateLux(r, g, b);
+//		lux = calculateLux(r, g, b);
 		
 		sprintf(rgbinf,"%d %d %d\n",r,g,b);
 		sprintf(colorTempinf,"ColTe=%d",colorTemp);
 		
-		HAL_UART_Transmit(&huart1, (uint8_t*)rgbinf, strlen(rgbinf), HAL_MAX_DELAY);
-		HAL_UART_Transmit(&huart1, (uint8_t*)colorTempinf, strlen(colorTempinf), HAL_MAX_DELAY);
+//		HAL_UART_Transmit(&huart1, (uint8_t*)rgbinf, strlen(rgbinf), HAL_MAX_DELAY);
+//		HAL_UART_Transmit(&huart1, (uint8_t*)colorTempinf, strlen(colorTempinf), HAL_MAX_DELAY);
 		//TSL2561
 		TSL2561_SetTiming(&hi2c1, TSL2561_INTEGRATIONTIME_101MS, TSL2561_GAIN_0X);
 		// Check luminosity level and calculate lux
@@ -157,7 +157,8 @@ int main(void)
 		lux = TSL2561_CalculateLux(broadband, ir);
 //			int sz=sprintf(buffer, "broadband %u IR %u LUX %lu\r\n", broadband, ir, lux);
 		sprintf(Luxinf,"LUX=%d",lux);
-		HAL_UART_Transmit(&huart1, (uint8_t*)Luxinf, strlen(Luxinf), HAL_MAX_DELAY);
+		sprintf(BLEinf,"R%dG%dB%dC%dL%d",r,g,b,colorTemp,lux);
+		HAL_UART_Transmit(&huart1, (uint8_t*)BLEinf, strlen(BLEinf), HAL_MAX_DELAY);
 		
 		//SSD1306
 //		ssd1306_TestAll();

@@ -271,7 +271,7 @@ void TSL2561_GetLuminosity (I2C_HandleTypeDef *hi2c, uint16_t *broadband, uint16
  * @retval uint32_t LUX value
  */
 
-uint32_t TSL2561_CalculateLux(uint16_t ch0, uint16_t ch1)
+uint16_t TSL2561_CalculateLux(uint16_t ch0, uint16_t ch1)
 {
   unsigned long chScale;
   unsigned long channel1;
